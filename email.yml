@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  email:
+    image: dhf0820/email_connector:220102.0
+    restart: on-failure
+    ports:
+      - "0.0.0.0:19301:9200"
+    environment:
+      CONFIG_ADDRESS: "http://ids_core:9200/api/v1"
+      SERVICE_NAME: "email_connector"
+      SERVICE_VERSION: "ldocker"
+    env_file:
+      - .env
+    volumes:
+      - email-data:/data
+    networks:
+      - ids_attachable
+
+  # allscripts:
+  #   image: dhf0820/allscripts_connector:210327.1
+  #   restart: on-failure
+  #   ports:
+  #     - "0.0.0.0:9250:50051"
+  #     - "0.0.0.0:8250:8220"
+  #   environment:
+  #     #ALLSCRIPTS_CONFIG: ./config/allscripts_connector_config.json
+  #    CONFIG_ADDRESS: http://cutter.vertisoft.com:19200/api/v1
+  #     CONFIG_DELAY: 2
+  #     CONFIG_ATTEMPTS: 10
+  #   depends_on:
+  #     - core
+  #   env_file:
+  #     - .env.allscripts
+  #   volumes:
+  #     - delivery-data:/data
+  #   networks:
+  #     - vs_network
+
+volumes:
+  email-data:
+
+networks:
+  ids_attachable:
+    external: true
